@@ -1,4 +1,4 @@
-FROM python:3.12-alpine3.19
+FROM python:3.13-alpine3.20
 
 # Install dependencies
 RUN apk add --no-cache \
@@ -13,13 +13,14 @@ RUN apk add --no-cache \
       chromium-chromedriver
 
 WORKDIR /app
-COPY index.py requirements.txt ./
+COPY potoken-generator.py requirements.txt ./
+COPY potoken_generator/ ./potoken_generator/
 
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY docker/scripts/startup.sh ./
 
-RUN sed -i 's/await self.sleep(0.5)/await self.sleep(2)/' /usr/local/lib/python3.12/site-packages/nodriver/core/browser.py
+RUN sed -i 's/await self.sleep(0.5)/await self.sleep(2)/' /usr/local/lib/python3.13/site-packages/nodriver/core/browser.py
 
 # Run
 CMD [ "./startup.sh"]
